@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Deleted Disasters Log</h2>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Log ID</th>
+            <th>Disaster ID</th>
+            <th>Type</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Location ID</th>
+            <th>Deleted At</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in rows %}
+        <tr>
+            <td>{{ row[0] }}</td>
+            <td>{{ row[1] }}</td>
+            <td>{{ row[2] }}</td>
+            <td>{{ row[3] }}</td>
+            <td>{{ row[4] }}</td>
+            <td>{{ row[5] }}</td>
+            <td>{{ row[6] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

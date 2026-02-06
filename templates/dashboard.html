@@ -1,0 +1,72 @@
+
+
+{% extends 'base.html' %}
+{% block content %}
+
+
+<div style="
+    width: 100%;
+    margin-bottom: 2rem;
+">
+    <div style="background: #d8bff6; padding: 2.2rem 1rem 2rem 2rem; border-radius: 1.2rem; box-shadow: 0 3px 12px #ffe6cc90; display: flex; align-items: center; font-size: 2.2rem;">
+        <div style="font-size: 2.3rem; margin-right: 1.2rem;">💰</div>
+        <div>
+            <div style="font-size: 1.3rem; font-weight: 600; color: #5a00c9; letter-spacing: 1px;">Total Donations Received</div>
+            <div style="font-size: 2.5rem; font-weight: bold; color: #5a00c9; margin-top: 0.2rem;">
+                ₹ {{ '%.2f'|format(total_donations) }}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="dashboard-title">Dashboard</div>
+<div class="dashboard-subtitle">Overview of disaster management system</div>
+<div class="dashboard-cards">
+    <div class="card-box">
+        <div class="card-title">Locations</div>
+        <div class="card-count">{{ counts.locations }}</div>
+        <div class="card-icon">📍</div>
+    </div>
+    <div class="card-box">
+        <div class="card-title">Disasters</div>
+        <div class="card-count">{{ counts.disasters }}</div>
+        <div class="card-icon">⚠️</div>
+    </div>
+    <div class="card-box">
+        <div class="card-title">Relief Camps</div>
+        <div class="card-count">{{ counts.relief_camps }}</div>
+        <div class="card-icon">📋</div>
+    </div>
+    <div class="card-box">
+        <div class="card-title">Victims</div>
+        <div class="card-count">{{ counts.victims }}</div>
+        <div class="card-icon">👪</div>
+    </div>
+    <div class="card-box">
+        <div class="card-title">Volunteers</div>
+        <div class="card-count">{{ counts.volunteers }}</div>
+        <div class="card-icon">🤝</div>
+    </div>
+    <div class="card-box">
+        <div class="card-title">Resources</div>
+        <div class="card-count">{{ counts.resources }}</div>
+        <div class="card-icon">📦</div>
+    </div>
+    <div class="card-box">
+        <div class="card-title">Rescue Teams</div>
+        <div class="card-count">{{ counts.rescue_teams }}</div>
+        <div class="card-icon">🛡️</div>
+    </div>
+    <div class="card-box">
+        <div class="card-title">Donors</div>
+        <div class="card-count">{{ counts.donors }}</div>
+        <div class="card-icon">❤️</div>
+    </div>
+    <div class="card-box">
+        <div class="card-title">Donations</div>
+        <div class="card-count">{{ counts.donations }}</div>
+        <div class="card-icon">💵</div>
+    </div>
+</div>
+{% endblock %}

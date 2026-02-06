@@ -1,0 +1,269 @@
+CREATE DATABASE DISASTER_MANAGEMENT;
+USE DISASTER_MANAGEMENT;
+
+-- LOCATION
+CREATE TABLE Location (
+    Location_ID INT AUTO_INCREMENT PRIMARY KEY,
+    City VARCHAR(50) NOT NULL,
+    District VARCHAR(50) NOT NULL,
+    State VARCHAR(50) NOT NULL,
+    UNIQUE (City, District, State) -- prevents duplicate same locations
+);
+
+
+-- DISASTER
+CREATE TABLE Disaster (
+    Disaster_ID INT auto_increment PRIMARY KEY,
+    D_type VARCHAR(50) NOT NULL CHECK (D_type IN ('Flood','Cyclone','Earthquake','Landslide','Fire','Other')),
+    D_date DATE NOT NULL,
+    D_time TIME,
+    Location_ID INT NOT NULL,
+    FOREIGN KEY (Location_ID) REFERENCES Location(Location_ID)
+);
+
+-- RELIEF CAMP
+CREATE TABLE Relief_Camp (
+    Camp_ID INT auto_increment PRIMARY KEY,
+    Camp_Name VARCHAR(100) NOT NULL,
+    Location VARCHAR(100) NOT NULL,
+    Capacity INT NOT NULL CHECK (Capacity > 0),
+    Incharge VARCHAR(100) NOT NULL
+);
+
+-- VICTIM
+CREATE TABLE Victim (
+    Victim_ID INT AUTO_INCREMENT PRIMARY KEY,
+    Vic_name VARCHAR(100) NOT NULL,
+    DOB DATE NOT NULL,
+    Age INT NOT NULL CHECK (Age > 0),
+    Contact VARCHAR(15) NOT NULL UNIQUE,
+    Disaster_ID INT NOT NULL,
+    Camp_ID INT,
+    CONSTRAINT fk_Disaster FOREIGN KEY (Disaster_ID) REFERENCES Disaster(Disaster_ID) ON DELETE CASCADE,
+    CONSTRAINT fk_Relief_Camp FOREIGN KEY (Camp_ID) REFERENCES Relief_Camp(Camp_ID) ON DELETE SET NULL
+);
+
+-- VOLUNTEERS
+CREATE TABLE Volunteers (
+    Volunteer_ID INT auto_increment PRIMARY KEY,
+    V_name VARCHAR(100) NOT NULL,
+    Age INT NOT NULL CHECK (Age >= 18),
+    Gender VARCHAR(10) CHECK (Gender IN ('Male','Female','Other')),
+    Contact_Info VARCHAR(15) NOT NULL UNIQUE
+);
+
+-- RESOURCES
+CREATE TABLE Resources (
+    Resource_ID INT auto_increment PRIMARY KEY,
+    R_name VARCHAR(100) NOT NULL,
+    R_type VARCHAR(50) NOT NULL,
+    Quantity INT NOT NULL CHECK (Quantity > 0)
+);
+
+-- RESCUE TEAM
+CREATE TABLE Rescue_Team (
+    Team_ID INT auto_increment PRIMARY KEY,
+    Team_name VARCHAR(100) NOT NULL,
+    Team_type VARCHAR(50) CHECK (Team_type IN ('Medical','Rescue','Army','Fire','Other')),
+    No_of_People INT NOT NULL CHECK (No_of_People > 0),
+    Disaster_ID INT NOT NULL,
+    CONSTRAINT fk2_Disaster FOREIGN KEY (Disaster_ID) REFERENCES Disaster(Disaster_ID)
+);
+
+-- DONOR
+CREATE TABLE Donor (
+    Donor_ID INT auto_increment PRIMARY KEY,
+    Donor_name VARCHAR(100) NOT NULL,
+    Contact VARCHAR(15) NOT NULL UNIQUE
+);
+
+-- DONATION
+CREATE TABLE Donation (
+    Donation_ID INT auto_increment PRIMARY KEY,
+    Donor_ID INT NOT NULL,
+    Amount DECIMAL(12,2) NOT NULL CHECK (Amount > 0),
+    Donation_date DATE NOT NULL,
+    Resource_ID INT NOT NULL,
+    CONSTRAINT fk_Donor FOREIGN KEY (Donor_ID) REFERENCES Donor(Donor_ID),
+    CONSTRAINT fk_Resources FOREIGN KEY (Resource_ID) REFERENCES Resources(Resource_ID) 
+);
+
+
+INSERT INTO Location VALUES
+(1, 'Mumbai', 'Mumbai Suburban', 'Maharashtra'),
+(2, 'Chennai', 'Chennai', 'Tamil Nadu'),
+(3, 'Kolkata', 'Kolkata', 'West Bengal'),
+(4, 'Guwahati', 'Kamrup', 'Assam'),
+(5, 'Dehradun', 'Dehradun', 'Uttarakhand'),
+(6, 'Shimla', 'Shimla', 'Himachal Pradesh'),
+(7, 'Bhubaneswar', 'Khordha', 'Odisha'),
+(8, 'Hyderabad', 'Hyderabad', 'Telangana');
+
+SELECT * FROM Location;
+INSERT INTO Disaster VALUES
+(101, 'Flood', '2025-07-15', '10:30:00', 1),
+(102, 'Cyclone', '2025-11-05', '16:00:00', 2),
+(103, 'Earthquake', '2025-02-20', '05:15:00', 3),
+(104, 'Landslide', '2025-08-12', '09:45:00', 5),
+(105, 'Fire', '2025-04-03', '22:10:00', 8),
+(106, 'Flood', '2025-06-28', '14:20:00', 4),
+(107, 'Cyclone', '2025-10-19', '18:40:00', 7),
+(108, 'Other', '2025-01-12', '11:00:00', 6);
+
+ 
+
+INSERT INTO Relief_Camp VALUES
+(201, 'Andheri Sports Complex Camp', 'Andheri, Mumbai', 500, 'Rajesh Kumar'),
+(202, 'Marina Shelter', 'Marina Beach, Chennai', 300, 'Priya Iyer'),
+(203, 'Salt Lake Camp', 'Salt Lake, Kolkata', 400, 'Anirban Ghosh'),
+(204, 'Nehru Ground Shelter', 'Dispur, Guwahati', 250, 'Rakesh Das'),
+(205, 'Forest Colony Camp', 'Rajpur Road, Dehradun', 200, 'Seema Rawat'),
+(206, 'Shimla School Camp', 'Lakkar Bazar, Shimla', 150, 'Ankita Sharma'),
+(207, 'Bhubaneswar Relief Center', 'Saheed Nagar, Bhubaneswar', 350, 'Bikram Mohanty'),
+(208, 'Secunderabad Shelter', 'Secunderabad, Hyderabad', 280, 'Sunil Reddy');
+
+ 
+
+INSERT INTO Victim VALUES
+(301, 'Amit Sharma', '1985-05-12', 39, '9876543210', 101, 201),
+(302, 'Lakshmi Nair', '1990-11-23', 34, '9876543211', 102, 202),
+(303, 'Ravi Das', '1978-02-14', 46, '9876543212', 103, 203),
+(304, 'Pooja Singh', '2001-07-30', 23, '9876543213', 104, 205),
+(305, 'Suresh Reddy', '1995-09-19', 29, '9876543214', 105, 208),
+(306, 'Ananya Sen', '1988-03-10', 36, '9876543215', 103, 203),
+(307, 'Rohit Mehta', '2000-12-05', 24, '9876543216', 107, 207),
+(308, 'Farhan Ali', '1983-06-22', 41, '9876543217', 106, 204);
+
+ 
+
+INSERT INTO Volunteers VALUES
+(401, 'Karan Malhotra', 28, 'Male', '9000000001'),
+(402, 'Sneha Verma', 25, 'Female', '9000000002'),
+(403, 'Arjun Das', 32, 'Male', '9000000003'),
+(404, 'Meera Pillai', 29, 'Female', '9000000004'),
+(405, 'Rakesh Yadav', 35, 'Male', '9000000005'),
+(406, 'Shalini Rao', 27, 'Female', '9000000006'),
+(407, 'Vikram Singh', 30, 'Male', '9000000007'),
+(408, 'Nisha Khan', 26, 'Female', '9000000008');
+
+ 
+
+INSERT INTO Resources VALUES
+(501, 'Rice Bags', 'Food', 200),
+(502, 'Blankets', 'Clothing', 150),
+(503, 'Medicines', 'Medical', 300),
+(504, 'Drinking Water', 'Essential', 500),
+(505, 'Tents', 'Shelter', 100),
+(506, 'First Aid Kits', 'Medical', 120),
+(507, 'Clothes', 'Clothing', 250),
+(508, 'Milk Packets', 'Food', 180);
+
+ 
+
+INSERT INTO Rescue_Team VALUES
+(601, 'Mumbai Medical Squad', 'Medical', 20, 101),
+(602, 'Chennai Cyclone Rescuers', 'Rescue', 30, 102),
+(603, 'Kolkata Earthquake Relief', 'Army', 50, 103),
+(604, 'Dehradun Hill Rescuers', 'Rescue', 15, 104),
+(605, 'Hyderabad Fire Fighters', 'Fire', 25, 105),
+(606, 'Assam Flood Rescue Team', 'Rescue', 18, 106),
+(607, 'Odisha Cyclone Relief Force', 'Army', 40, 107),
+(608, 'Shimla Emergency Unit', 'Other', 10, 108);
+
+ 
+
+INSERT INTO Donor VALUES
+(701, 'Reliance Foundation', '9111000001'),
+(702, 'Infosys Trust', '9111000002'),
+(703, 'Rotary Club', '9111000003'),
+(704, 'Azim Premji Philanthropy', '9111000004'),
+(705, 'HDFC Bank CSR', '9111000005'),
+(706, 'Adani Foundation', '9111000006'),
+(707, 'Red Cross India', '9111000007'),
+(708, 'Tata Trusts', '9111000008');
+
+
+ 
+
+INSERT INTO Donation VALUES
+(801, 701, 500000.00, '2024-07-16', 501),
+(802, 702, 300000.00, '2024-11-06', 503),
+(803, 703, 200000.00, '2023-02-21', 502),
+(804, 704, 800000.00, '2023-08-13', 505),
+(805, 705, 1000000.00, '2024-04-04', 504),
+(806, 706, 250000.00, '2022-06-29', 507),
+(807, 707, 150000.00, '2023-10-20', 506),
+(808, 708, 1200000.00, '2024-01-13', 508);
+
+DELIMITER //
+
+CREATE TRIGGER trg_victim_before_insert
+BEFORE INSERT ON Victim
+FOR EACH ROW
+BEGIN
+    SET NEW.Age = TIMESTAMPDIFF(YEAR, NEW.DOB, CURDATE());
+END;
+//
+
+CREATE TRIGGER trg_victim_before_update
+BEFORE UPDATE ON Victim
+FOR EACH ROW
+BEGIN
+    SET NEW.Age = TIMESTAMPDIFF(YEAR, NEW.DOB, CURDATE());
+END;
+//
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE TRIGGER trg_donation_before_insert
+BEFORE INSERT ON Donation
+FOR EACH ROW
+BEGIN
+    IF NEW.Amount IS NULL THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Donation amount cannot be NULL';
+    END IF;
+END;
+//
+
+CREATE TRIGGER trg_donation_before_update
+BEFORE UPDATE ON Donation
+FOR EACH ROW
+BEGIN
+    IF NEW.Amount IS NULL THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Donation amount cannot be NULL';
+    END IF;
+END;
+//
+
+DELIMITER ;
+
+CREATE TABLE Disaster_Delete_Log (
+    Log_ID INT AUTO_INCREMENT PRIMARY KEY,
+    Disaster_ID INT,
+    D_type VARCHAR(50),
+    D_date DATE,
+    D_time TIME,
+    Location_ID INT,
+    Deleted_At DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+DELIMITER //
+
+CREATE TRIGGER trg_disaster_before_delete
+BEFORE DELETE ON Disaster
+FOR EACH ROW
+BEGIN
+    INSERT INTO Disaster_Delete_Log
+    (Disaster_ID, D_type, D_date, D_time, Location_ID)
+    VALUES
+    (OLD.Disaster_ID, OLD.D_type, OLD.D_date, OLD.D_time, OLD.Location_ID);
+END;
+//
+
+DELIMITER ;
+
+SELECT * FROM Disaster_Delete_Log;

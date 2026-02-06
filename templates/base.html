@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Disaster Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://unpkg.com/@tabler/icons@2.44.0/icons-react/dist/index.umd.min.js"></script>
+</head>
+<body>
+<div class="sidebar">
+    <div class="sidebar-header">Disaster Management</div>
+    <a class="nav-link {% if request.endpoint == 'dashboard' %}active{% endif %}" href="{{ url_for('dashboard') }}">
+        <span><i class="bi bi-house"></i></span> Dashboard
+    </a>
+    <a class="nav-link" href="{{ url_for('location_list') }}">
+        <span>📍</span> Locations
+    </a>
+    <a class="nav-link" href="{{ url_for('disaster_list') }}">
+        <span>⚠️</span> Disasters
+    </a>
+    <a class="nav-link" href="{{ url_for('relief_camp_list') }}">
+        <span>📋</span> Relief Camps
+    </a>
+    <a class="nav-link" href="{{ url_for('victim_list') }}">
+        <span>🧑‍🤝‍🧑</span> Victims
+    </a>
+    <a class="nav-link" href="{{ url_for('volunteers_list') }}">
+        <span>🤝</span> Volunteers
+    </a>
+    <a class="nav-link" href="{{ url_for('resources_list') }}">
+        <span>📦</span> Resources
+    </a>
+    <a class="nav-link" href="{{ url_for('rescue_team_list') }}">
+        <span>🛡️</span> Rescue Teams
+    </a>
+    <a class="nav-link" href="{{ url_for('donor_list') }}">
+        <span>❤️</span> Donors
+    </a>
+    <a class="nav-link" href="{{ url_for('donation_list') }}">
+        <span>💵</span> Donations
+    </a>
+</div>
+<div class="main-content">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{category}}" role="alert">
+          {{ message }}
+        </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename='scripts.js') }}"></script>
+</body>
+</html>

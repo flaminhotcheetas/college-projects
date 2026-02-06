@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>{{ title }}</h2>
+<form method="POST">
+  {{ form.hidden_tag() }}
+  {% for field in form %}
+    <div class="mb-3">
+      {{ field.label(class_="form-label") }}
+      {{ field(class_="form-control") }}
+      {% if field.errors %}
+        <div class="text-danger">
+          {% for error in field.errors %}
+            {{ error }}
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  {% endfor %}
+  <button type="submit" class="btn btn-success">Save</button>
+  <a href="{{ request.referrer or url_for('dashboard') }}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}
